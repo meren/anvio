@@ -888,7 +888,7 @@ function createLegendColorPanel(legend_id) {
     // categorical data layer display values are tracked in the global categorical_layer_display var
     let active_layer = categorical_layer_display.find(layer => layer['layer'].replaceAll('_', ' ') == legend['name'])
     if(active_layer['display'] == 'text'){
-        template = `<div>${active_layer['layer']}'s display is currently set to text.</div>`
+        template = `<div>${legend['name']}'s display is currently set to text.</div>`
         $('#legend_content_' + legend_id).empty();
         $('#legend_content_' + legend_id).html(template);
         return
