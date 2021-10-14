@@ -80,6 +80,8 @@ var a_display_is_drawn = false;
 var max_branch_support_value_seen = null;
 var min_branch_support_value_seen = null;
 
+var categorical_layer_display = [];
+
 var request_prefix = getParameterByName('request_prefix');
 //---------------------------------------------------------
 //  Init
@@ -882,6 +884,16 @@ function createLegendColorPanel(legend_id) {
     var legend = legends[legend_id];
     var template = '';
 
+    // when a categorical data layer display value is set to 'text', we no longer need to generate colorpickers for each item
+    // categorical data layer display values are tracked in the global categorical_layer_display var
+    let active_layer = categorical_layer_display.find(layer => layer['layer'].replaceAll('_', ' ') == legend['name'] )
+    if(active_layer['display'] == 'text'){
+        template = `<div>${active_layer['layer']}'s display is currently set to text.</div>`
+        $('#legend_content_' + legend_id).empty();
+        $('#legend_content_' + legend_id).html(template);
+        return
+    }
+
     for (var j = 0; j < legend['item_names'].length; j++) {
 
         var _name = legend['item_names'][j];
@@ -1271,6 +1283,10 @@ function buildLayersTable(order, settings)
                                    .replace(new RegExp('{margin}', 'g'), margin);
 
                 $('#tbody_layers').append(template);
+                categorical_layer_display.push({
+                    'layer' : layer_name,
+                    'display' : type
+                })
             }
             //
             // numerical layer
