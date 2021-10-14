@@ -1213,7 +1213,7 @@ function buildLayersTable(order, settings)
                     }
 
                     // set default categorical layer type to 'text' if there are > 20 unique values
-                    // set default height to 0 if there are > 20 unique values AND 1000+ total leaves(leafs? items? thingies?)
+                    // set default max font size to 0 if there are > 20 unique values && 1000+ total leaves(leafs? items? thingies?)
                     console.log(layerdata.length);
                     var _unique_items = [];
                     for (var _pos = 1; _pos < layerdata.length; _pos++)
@@ -1230,9 +1230,11 @@ function buildLayersTable(order, settings)
                             break;
                         }
                         if (_unique_items.length > 20 && layerdata.length >= 1000) {
-                            toastr.warning("The layer " + layer_name + "' has been hidden by default to improve performance. You can adjust this in the Settings Pane");
+                            toastr.warning("The layer " + layer_name + "' has been hidden by default to improve performance. You can adjust this in the Settings Pane --> Layers --> 'Max. Font Size'");
                             height = '0';
-                            type = 'color';
+                            type = 'text';
+                            $('.max-font-size-input').show()
+                            $('#max_font_size').val(height)
                             break;
                         }
                     }
