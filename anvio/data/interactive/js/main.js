@@ -1212,9 +1212,8 @@ function buildLayersTable(order, settings)
                         var type = 'color';
                     }
 
-                    // set default categorical layer type to 'text'
-                    // if there are more than 11 unique values and leaf count is less than 300
-                    // 301 because layerdata has one extra row for the titles
+                    // set default categorical layer type to 'text' if there are > 20 unique values
+                    // set default height to 0 if there are > 20 unique values AND 1000+ total leaves(leafs? items? thingies?)
                     console.log(layerdata.length);
                     var _unique_items = [];
                     for (var _pos = 1; _pos < layerdata.length; _pos++)
@@ -1222,12 +1221,18 @@ function buildLayersTable(order, settings)
                         if (_unique_items.indexOf(layerdata[_pos][layer_id]) === -1)
                             _unique_items.push(layerdata[_pos][layer_id]);
 
-                        if (_unique_items.length > 20) {
+                        if (_unique_items.length > 20 && layerdata.length < 1000) {
                             toastr.info("Too many categorical values for the layer '" + layer_name + "' to be shown in colors, switching to text.");
                             height = '0';
                             type = 'text';
                             // we have at least one text layer, we can show max font size input
                             $('.max-font-size-input').show();
+                            break;
+                        }
+                        if (_unique_items.length > 20 && layerdata.length >= 1000) {
+                            toastr.warning("The layer " + layer_name + "' has been hidden by default to improve performance. You can adjust this in the Settings Pane");
+                            height = '0';
+                            type = 'color';
                             break;
                         }
                     }
@@ -1250,7 +1255,6 @@ function buildLayersTable(order, settings)
                     '<td>n/a</td>' +
                     '<td><input type="checkbox" class="layer_selectors"></input></td>' +
                     '</tr>';
-
                 template = template.replace(new RegExp('{id}', 'g'), layer_id)
                                    .replace(new RegExp('{name}', 'g'), layer_name)
                                    .replace(new RegExp('{option-type-' + type + '}', 'g'), ' selected')
