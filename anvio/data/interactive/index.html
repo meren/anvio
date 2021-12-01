@@ -810,6 +810,31 @@
                                     });
                                 </script>
                             </div>
+                            <span data-help='search-expression'>Inspect sequence from contig coordinates</span>
+                            <div class="form-horizontal">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 25%;">Start Position</td>
+                                        <td><input id="contig-inspect-start" type='number' value="" data-help="search-value" style="width: 100%;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Stop Position</td>
+                                        <td><input id="contig-inspect-stop" type='number' value="" data-help="search-value" style="width: 100%;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contig Name</td>
+                                        <td><input id="contig-inspect-name" value="" data-help="search-value" style="width: 100%;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><button type="button" class="btn btn-default btn-sm" onclick="inspectFromContigCoordinates();" data-help="search-button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><div id="search_result_message"></div></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                         <div class="form-horizontal" style="margin-top: 20px;">
                             <div class="sidebar-search-buttons btn-group col-md-12" role="group">
