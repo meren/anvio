@@ -222,3 +222,24 @@ function removeResult() {
 
     bins.RemoveNode(node_list);
 }
+
+function inspectFromContigCoordinates(){
+    let start = $('#contig-inspect-start').val()
+    let stop = $('#contig-inspect-stop').val()
+    let contig = $('#contig-inspect-name').val()
+
+    if (start == undefined || start == null || !stop){
+        alert('Please provide both start and stop positions')
+        return
+    }
+    if(!contig){
+        alert('Please provide the name of a known contig')
+        return
+    }
+    if(start <= stop){
+        alert("Please provide a stop position > than your start position")
+    }
+
+    localStorage.state = JSON.stringify(serializeSettings(true), null, 4);
+    window.open(generate_inspect_link({'type': 'inspect_split', 'item_name': contig, 'show_snvs': false}), '_blank');
+}
