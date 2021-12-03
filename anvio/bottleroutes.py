@@ -155,6 +155,7 @@ class BottleApplication(Bottle):
         self.route('/store_description',                       callback=self.store_description, method='POST')
         self.route('/upload_project',                          callback=self.upload_project, method='POST')
         self.route('/data/contig/<split_name>',                callback=self.get_sequence_for_split)
+        self.route('/data/contig_info/<contig_name>',          callback=self.get_sequence_for_contig)
         self.route('/summarize/<collection_name>',             callback=self.gen_summary)
         self.route('/summary/<collection_name>/:filename#.*#', callback=self.send_summary_static)
         self.route('/data/gene/<gene_callers_id>',             callback=self.get_sequence_for_gene_call)
@@ -1015,6 +1016,18 @@ class BottleApplication(Bottle):
 
         return json.dumps({'sequence': sequence, 'header': header})
 
+    def get_sequence_for_contig(self, contig_name):
+        contig_sequence = ''
+        try:
+            for (k,v) in self.interactive.split_sequences.items():
+                if contig_name in k:
+                    contig_sequence += v['sequence']
+        except Exception as e:
+            return json.dumps({'error' : e})
+        return json.dumps({
+            'sequence' : contig_sequence,
+            'contig' : contig_name
+        })
 
     def gen_summary(self, collection_name):
         if self.read_only:
