@@ -236,10 +236,13 @@ function inspectFromContigCoordinates(){
         alert('Please provide the name of a known contig')
         return
     }
-    if(start <= stop){
-        alert("Please provide a stop position > than your start position")
+    if(start >= stop){
+        alert("Please provide a stop position > your start position")
     }
 
-    localStorage.state = JSON.stringify(serializeSettings(true), null, 4);
-    window.open(generate_inspect_link({'type': 'inspect_split', 'item_name': contig, 'show_snvs': false}), '_blank');
+    fetch(`/data/contig_info/${contig}`)
+    .then(resp => resp.json())
+    .then(data => {
+        console.log(data)
+    })
 }
