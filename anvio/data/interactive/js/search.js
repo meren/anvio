@@ -1,5 +1,5 @@
 
-function searchContigs() 
+function searchContigs()
 {
     var svalue = $('#searchValue').val();
 
@@ -11,7 +11,7 @@ function searchContigs()
     var column = $('#searchLayerList').val();
     search_column = (column == 0) ? 'Item Name' : layerdata[0][column];
     var operator = $('#searchOperator').val();
-    
+
     if (operator < 6)
     {
         var operator_text = $('#searchOperator option:selected').text();
@@ -81,7 +81,7 @@ function searchFunctions() {
                         var _accession      = data['results'][i][3];
                         var _annotation     = data['results'][i][4];
                         var _search_term    = data['results'][i][5];
-                        var _split_name     = data['results'][i][6];                        
+                        var _split_name     = data['results'][i][6];
                     }
                     else
                     {
@@ -94,10 +94,10 @@ function searchFunctions() {
                     }
 
                     var _beginning = _annotation.toLowerCase().indexOf(_search_term.toLowerCase());
-                    _annotation = [_annotation.slice(0, _beginning), 
-                                   '<mark>', 
-                                   _annotation.slice(_beginning, _beginning + _search_term.length), 
-                                   '</mark>', 
+                    _annotation = [_annotation.slice(0, _beginning),
+                                   '<mark>',
+                                   _annotation.slice(_beginning, _beginning + _search_term.length),
+                                   '</mark>',
                                    _annotation.slice(_beginning + _search_term.length, _annotation.length)
                                    ].join("");
 
@@ -196,11 +196,11 @@ function highlightResult() {
         highlighted_splits.push(search_results[i]['split']);
     }
 
-    bins.HighlightItems(highlighted_splits); 
+    bins.HighlightItems(highlighted_splits);
 }
 
 function highlightSplit(name) {
-    bins.HighlightItems(name); 
+    bins.HighlightItems(name);
 }
 
 function appendResult() {
@@ -241,8 +241,34 @@ function inspectFromContigCoordinates(){
     }
 
     fetch(`/data/contig_info/${contig}`)
-    .then(resp => resp.json())
-    .then(data => {
-        console.log(data)
-    })
+        .then(resp => resp.json())
+        .then(data => {
+            let sequence = data['sequence'].substring(start, stop)
+            show_sequence_modal(contig, sequence)
+        })
 }
+
+function show_sequence_modal(title, content) {
+    // remove previous modal window
+    $('.modal-sequence').modal('hide');
+    $('.modal-sequence').remove();
+
+    $('body').append('<div class="modal modal-sequence" style="z-index: 10000;"> \
+        <div class="modal-dialog"> \
+            <div class="modal-content"> \
+                <div class="modal-header"> \
+                    <button class="close" data-dismiss="modal" type="button"><span>&times;</span></button> \
+                    <h4 class="modal-title">' + title + '</h4> \
+                </div> \
+                <div class="modal-body"> \
+                        <textarea class="form-control" style="width: 100%; height: 100%; font-family: monospace;" rows="16" onclick="$(this).select();" readonly>' + (content.startsWith('>') ? content : '>' + content) + '</textarea> \
+                </div> \
+                <div class="modal-footer"> \
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> \
+                </div> \
+            </div> \
+        </div> \
+    </div>');
+    $('.modal-sequence').modal('show');
+    $('.modal-sequence textarea').trigger('click');
+  }
