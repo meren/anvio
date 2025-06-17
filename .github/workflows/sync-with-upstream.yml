@@ -25,8 +25,8 @@ jobs:
       - name: Fetch and merge upstream changes
         run: |
           git fetch upstream
-          git checkout main  # or master, if that's your default branch
-          git merge upstream/main --allow-unrelated-histories || true
+          git checkout master  # or master, if that's your default branch
+          git merge upstream/master --allow-unrelated-histories || true
 
       - name: Push changes to fork
-        run: git push origin main
+        run: git push origin master
