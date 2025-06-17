@@ -12,7 +12,7 @@ jobs:
       - name: Checkout the fork
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GIT_PULL_FROM_ANVIO }}
 
       - name: Set up Git
         run: |
