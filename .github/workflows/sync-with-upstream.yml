@@ -1,0 +1,32 @@
+name: Daily Sync with Upstream
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # Runs at 05:00 UTC every day
+  workflow_dispatch:     # Allow manual triggering too
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the fork
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/merenlab/anvio.git
+
+      - name: Fetch and merge upstream changes
+        run: |
+          git fetch upstream
+          git checkout main  # or master, if that's your default branch
+          git merge upstream/main --allow-unrelated-histories || true
+
+      - name: Push changes to fork
+        run: git push origin main
